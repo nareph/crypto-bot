@@ -24,8 +24,4 @@ jobs:
     - name: Run Bot
       env:
         DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-        run: |
-          while true; do
-            python src/bot.py || echo "Crash - Relance dans 10s..."
-            sleep 10
-          done
+      run: nohup python src/bot.py > bot.log 2>&1 &  # Lancer en arrière-plan
