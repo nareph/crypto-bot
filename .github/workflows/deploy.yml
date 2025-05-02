@@ -7,13 +7,13 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 5  # Évite les runs infinis
+    timeout-minutes: 5
     
     steps:
     - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v4  
       with:
         python-version: '3.10'
         
@@ -21,23 +21,13 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pytest  # Pour les tests si nécessaire
-        
-    - name: Verify environment
-      run: |
-        echo "Python version: $(python --version)"
-        echo "Pip list:"
-        pip list
         
     - name: Run Bot with logging
       env:
         DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
       run: |
-        # Crée un fichier de log structuré
         mkdir -p logs
         nohup python -u src/bot.py > logs/bot_$(date +%Y%m%d_%H%M%S).log 2>&1 &
-        
-        # Vérification que le bot démarre
         sleep 15
         if ! pgrep -f "python src/bot.py"; then
           echo "::error::Bot failed to start"
@@ -47,7 +37,7 @@ jobs:
         
     - name: Upload logs (on failure)
       if: failure()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4  
       with:
         name: bot-logs
         path: logs/*.log
