@@ -44,10 +44,10 @@ class CryptoBot(commands.Bot):
         
         # Extension loading with error handling
         extensions = [
-            'commands.price',
-            'commands.chart', 
-            'commands.alert',
-            'commands.help'
+            'src.commands.price',
+            'src.commands.chart', 
+            'src.commands.alert',
+            'src.commands.help'
         ]
         
         for ext in extensions:
